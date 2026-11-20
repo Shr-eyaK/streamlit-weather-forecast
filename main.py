@@ -3,14 +3,39 @@ import plotly.express as px
 from backend import get_data
 from datetime import datetime, timezone
 
-# frontend - add title, text input, slider, select box, and sub header
-st.title("Weather Forecast for the Next Days")
-place = st.text_input("Place: ")
-days = st.slider("Forecast Days", min_value=1, max_value=5,
-                 help="Select the number of forecast days")
-option = st.selectbox("Select data to view",
-                      ("Temperature", "Sky"))
-st.subheader(f"{option} for the next {days} days in {place}")
+# Page configuration
+st.set_page_config(
+    page_title="Weather Forecast",
+    page_icon="🌤️",
+    layout = "wide"
+)
+
+# Main page header
+st.title("🌤️ Weather Forecast")
+st.caption("Explore upcoming weather conditions and temperature trends.")
+
+st.divider()
+
+# Sidebar controls
+with st.sidebar:
+    st.header("⚙️ Settings")
+
+    place = st.text_input("Enter a city", placeholder="e.g. Toronto")
+
+    days = st.slider(
+        "Forecast Days",
+        min_value=1,
+        max_value=5,
+        help="Select the number of forecast days"
+    )
+
+    option = st.selectbox(
+        "Select data to view",
+        ("Temperature", "Sky")
+    )
+
+# Main forecast section
+st.subheader(f"{option} Forecast")
 
 if place:
     # Get the temperature/sky data
@@ -34,18 +59,41 @@ if place:
         col1, col2 = st.columns(2)
 
         with col1:
-            st.metric("🌅 Sunrise", sunrise)
+            st.metric("🌅 Sunrise", sunrise, border=True)
 
         with col2:
-            st.metric("🌇 Sunset", sunset)
+            st.metric("🌇 Sunset", sunset, border=True)
 
 
         if option == "Temperature":
-            temperatures = [dict["main"]["temp"] for dict in filtered_data]
-            dates = [dict["dt_txt"] for dict in filtered_data]
-            # Create a temperature plot
-            figure = px.line(x=dates, y=temperatures, labels={"x": "Dates", "y": "Temperature (C)"})
-            st.plotly_chart(figure)
+            temperatures = [item["main"]["temp"] for item in filtered_data]
+            dates = [item["dt_txt"] for item in filtered_data]
+
+            # Create an improved temperature chart
+            figure = px.line(
+                x=dates,
+                y=temperatures,
+                labels={
+                    "x": "Date and Time",
+                    "y": "Temperature (°C)"
+                },
+                markers=True,
+                template="plotly_dark"
+            )
+
+            figure.update_traces(
+                line=dict(color="#7ABFFF", width=3),
+                marker=dict(size=7, color="#7ABFFF")
+            )
+
+            figure.update_layout(
+                height=400,
+                hovermode="x unified",
+                margin=dict(l=20, r=20, t=30, b=20)
+            )
+
+            with st.container(border=True):
+                st.plotly_chart(figure, use_container_width=True)
 
         if option == "Sky":
             images = {
@@ -63,12 +111,29 @@ if place:
                 for condition in sky_conditions
             ]
 
-            captions = [
-                f"{condition} - {date}"
-                for condition, date in zip(sky_conditions, dates)
+            formatted_dates = [
+                datetime.strptime(date, "%Y-%m-%d %H:%M:%S").strftime("%a, %b %d • %I %p")
+                for date in dates
             ]
 
-            st.image(image_paths, width=115, caption=captions)
+            captions = [
+                f"{condition} | {date}"
+                for condition, date in zip(sky_conditions, formatted_dates)
+            ]
+
+            # Display weather images in rows of four
+            for i in range(0, len(image_paths), 4):
+                cols = st.columns(4)
+
+                for col, image_path, caption in zip(
+                    cols,
+                    image_paths[i:i+4],
+                    captions[i:i+4]
+                ):
+                    with col:
+                        with st.container(border=True):
+                            st.image(image_path, use_container_width=True)
+                            st.caption(caption)
 
     except KeyError:
         st.write("That place does not exist.")

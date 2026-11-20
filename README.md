@@ -4,6 +4,10 @@
 
 This interactive web application allows users to check weather forecasts for up to 5 days in cities around the world. It provides temperature information and sky conditions through an easy-to-use interface with interactive visualizations.
 
+## Live Demo
+
+[Try the Weather Forecast Web App](https://weather-forecast-shreya.streamlit.app/)
+
 ## Features
 
 - **City Selection**: Enter the name of any city to retrieve its weather forecast.
@@ -11,7 +15,18 @@ This interactive web application allows users to check weather forecasts for up 
 - **Data Options**: Choose whether to view temperature trends or sky conditions.
 - **Temperature Visualization**: Explore forecasted temperature trends through interactive Plotly graphs.
 - **Sky Conditions**: View visual representations of forecasted weather conditions.
-- **Interactive Interface**: Easily customize forecast options and explore weather information.
+- **Sunrise and Sunset**: View local sunrise and sunset times for the selected city.
+- **Interactive Interface**: Use the sidebar to customize forecast settings and explore weather information.
+
+## Screenshots
+
+### Temperature Forecast
+
+![Temperature Forecast](screenshots/temperature-forecast.png)
+
+### Sky Conditions
+
+![Sky Conditions](screenshots/sky-forecast.png)
 
 ## How It Works
 
@@ -42,7 +57,7 @@ Before running the application, make sure you have the following:
 
 1. Clone the repository:
 
-   `git clone YOUR_GITHUB_REPOSITORY_URL`
+   `git clone https://github.com/Shr-eyaK/streamlit-weather-forecast.git`
 
 2. Navigate to the project directory:
 
@@ -63,8 +78,7 @@ Before running the application, make sure you have the following:
 6. Add your API key to `secrets.toml` using the following configuration:
 
    ```toml
-   [openweathermap]
-   api_key = "YOUR_API_KEY"
+   API_KEY = "YOUR_API_KEY"
    ```
 
 7. Start the application:
@@ -87,7 +101,7 @@ Before running the application, make sure you have the following:
 
 ## Project Background
 
-This project was completed as part of a university project and further prepared for public deployment as a portfolio project.
+This project was completed as part of a university project and further customized and prepared for public deployment as a portfolio project.
 
 ## License
 
