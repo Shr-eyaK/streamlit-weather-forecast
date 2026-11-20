@@ -1,0 +1,18 @@
+import requests
+import streamlit as st
+
+API_KEY = st.secrets["API_KEY"]
+
+# Make the call to the API and filter the data
+@st.cache_data(ttl=600)
+def get_data(place, forecast_days=None):
+    url = f"https://api.openweathermap.org/data/2.5/forecast?q={place}&appid={API_KEY}&units=metric"
+    response = requests.get(url)
+    data = response.json()
+    filtered_data = data["list"]
+    nr_values = 8 * forecast_days
+    filtered_data = filtered_data[:nr_values]
+    return filtered_data, data["city"]
+
+
+

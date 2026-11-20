@@ -1,0 +1,16 @@
+# Python virtual environments
+.venv/
+venv/
+
+# IDE settings
+.idea/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Private API credentials
+.streamlit/secrets.toml
+
+# Other project files
+happiness_app/
